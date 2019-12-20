@@ -1,4 +1,4 @@
-# ADSL
+# ADSL Lab
 cd Documents/Suyash/adsl
 mkdir $1
 cd $1
