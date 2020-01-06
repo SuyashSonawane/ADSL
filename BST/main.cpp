@@ -39,7 +39,7 @@ private:
 		}
 		return root;
 	}
-		void print_node(node *n)
+	void print_node(node *n)
 	{
 		cout<<"\n\tKeyword  : "<<n->key;
 		cout<<"\n\tMeaning  : "<<n->meaning<<endl;
@@ -69,7 +69,7 @@ private:
 		BST_print_pre(root->right);
 
 	}
-		void BST_print_post(node *root)
+	void BST_print_post(node *root)
 	{
 
 		if(root==NULL)
@@ -111,7 +111,7 @@ private:
 		do{
 			if(temp->key==key)
 			{
-				print_node(temp);
+				print_node(temp)
 				return true;
 			}
 			else if(key >temp->key)
@@ -121,6 +121,46 @@ private:
 		}while(temp!=NULL);
 
 		return false;
+	}
+	node * minValueNode(struct node* node)
+	{
+		struct node* current = node;
+
+		while (current && current->left != NULL)
+		current = current->left;
+
+		return current;
+	} 
+	node * deleteNode(node *root , string key)
+	{
+    if (root == NULL) return root;
+  
+    if (key < root->key)
+        root->left = deleteNode(root->left, key);
+  
+    else if (key > root->key)
+        root->right = deleteNode(root->right, key);
+  
+    else
+    {
+        if (root->left == NULL)
+        {
+            node *temp = root->right;
+            delete(root);
+            return temp;
+        }
+        else if (root->right == NULL)
+        {
+            node *temp = root->left;
+            delete(root);
+            return temp;
+        }
+  
+        node* temp = minValueNode(root->right);
+        root->key = temp->key;
+        root->right = deleteNode(root->right, temp->key);
+    }
+    return root; 
 	}
 
 
@@ -169,6 +209,28 @@ public:
 		
 		cout<<endl;
 	}
+	// void update()
+	// {
+	// 	string key ,new_mean;
+	// 	node *temp=root;
+	// 	while(temp!=NULL);
+	// }
+	void Del()
+	{
+		string key;
+		cout<<"Enter the keyword : ";
+		cin>>key;
+		flag=BST_search(key);
+		if(!flag)
+		{
+			cout<<"No such Entry";
+			return;
+
+		}
+		root=deleteNode(root,key);
+	}
+
+
 	void search()
 	{
 		bool flag;
@@ -197,7 +259,7 @@ int main()
 
 	while(1)
 	{
-		cout<<"1.Insert\n2.Display\n3.Search\n99.Exit";
+		cout<<"1.Insert\n2.Display\n3.Search\n4.Delete\n99.Exit";
 		cout<<"\nEnter choice:: ";
 		cin>>ui;
 		switch(ui)
@@ -210,6 +272,9 @@ int main()
 				break;
 			case 3:
 				b.search();
+				break;
+			case 4:
+				b.Del();
 				break;
 			case 99:
 				return 0;
