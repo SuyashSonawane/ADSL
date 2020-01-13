@@ -1,132 +1,101 @@
 #include <iostream>
-
-using namespace std; 
-
-struct node
-{
-	int data;
-	bool isl,isr;   // true -- threaded
-	node *left , *right;
-
+#include <cstdlib>
+#define MAX_VALUE 65536
+using namespace std;
+class N { //node declaration
+   public:
+      int k;
+   N *l, *r;
+   bool leftTh, rightTh;
 };
+class ThreadedBinaryTree {
+   private:
+   N *root;
+   public:
+   ThreadedBinaryTree() { //constructor to initialize the variables
+      root= new N();
+      root->r= root->l= root;
+      root->leftTh = true;
+      root->k = MAX_VALUE;
+   }
+   void insert(int key) {
+      N *p = root;
+      for (;;) {
+         if (p->k< key) {
+            if (p->rightTh)
+               break;
+            p = p->r;
+         } else if (p->k > key) { // move to left thread
+            if (p->leftTh)
+               break;
+            p = p->l;
+         } else {
+            return;
+         }
+      }
+      N *temp = new N();
+      temp->k = key;
+      temp->rightTh= temp->leftTh= true;
+      if (p->k < key) {
+         temp->r = p->r;
+         temp->l= p;
+         p->r = temp;
+         p->rightTh= false;
+      } else {
+         temp->r = p;
+         temp->l = p->l;
+         p->l = temp;
+         p->leftTh = false;
+      }
+   }
+  
 
-class TBT
-{
-	node *dummy,*root;
 
-	void BST_print_in(node *root)
-	{
-
-		if(root==dummy)
-		{
-			return;
-		}
-				print_node(root);
-
-		BST_print_in(root->left);
-		BST_print_in(root->right);
-
+	void displayTree() { //print the tree
+	   N *temp = root, *p;
+	   while(1) {
+	      p = temp;
+	      temp = temp->r;
+	      if (!p->rightTh) {
+	         while (!temp->leftTh) {
+	            temp = temp->l;
+	         }
+	      }
+	      if (temp == root)
+	         break;
+	      cout<<temp->k<<" ";
+	   }
+	   cout<<endl;
 	}
-	void print_node(node *n)
-	{
-		cout<<"\nData  : "<<n->data;
-		cout<<"\n";
-	}
-public:
-	TBT()
-	{
-		root=NULL;
-		dummy->left=root;
-		dummy->right=dummy;
-
-	}
-	void insert(int k)
-	{
-		if(root==NULL)
-		{
-			node *nn = new node;
-			nn->data=k;
-			nn->left=dummy;
-			nn->right=dummy;
-			nn->isr=nn->isl=true;
-			root=nn;
-			return;
-		}
-		else
-		{
-			node *temp=root;
-			node *parent;
-			do
-			{
-				if(k<temp->data)
-				{
-					parent=temp;
-					temp=temp->left;
-					continue;
-				}
-				if(k>temp->data)
-				{
-					parent=temp;
-					temp=temp->right;
-					continue;
-				}
-			}
-			while(temp!=dummy);
-			if(parent->isr==true && parent->isl==true)
-			{
-				node *nn = new node;
-				nn->data=k;
-				nn->left=parent->left;
-				nn->right=parent->right;
-				nn->isr=nn->isl=true;
-				if(k>parent->data)
-				{
-					parent->right=nn;
-					parent->isr=false;
-				}
-				else
-				{
-					parent->left=nn;
-					parent->isl=false;
-				}
-			}
-			if(parent->isr==true && parent->isl==false)
-			{
-					node *nn = new node;
-					nn->data=k;
-					nn->left=parent->left;
-					nn->right=parent->right;
-					nn->isr=nn->isl=true;
-					parent->right=nn;
-					parent->isr=false;
-			}
-			if(parent->isr==false && parent->isl==true)
-			{
-					node *nn = new node;
-					nn->data=k;
-					nn->left=parent->left;
-					nn->right=parent->right;
-					nn->isr=nn->isl=true;
-					parent->left=nn;
-					parent->isl=false;
-			}
-		}
-	}
-	void print()
-	{
-		BST_print_in(root);
-		cout<<"\n";
-	}
-	
-
 };
-
-int main()
-{
-	TBT a;
-	a.insert(10);
-	a.insert(5);
-	cout<<"Inserted\n";
-	a.print();
-
+int main() {
+   ThreadedBinaryTree tbt;
+   cout<<"ThreadedBinaryTree\n";
+   char ch;
+   int c, v;  
+   while(1) {
+      cout<<"1. Insert "<<endl;
+      cout<<"2. Display"<<endl;
+      cout<<"99. Exit"<<endl;
+      cout<<"Enter Your Choice: ";
+      cin>>c;
+      //perform switch operation
+      switch (c) {
+         case 1 :
+            cout<<"Enter integer element to insert: ";
+            cin>>v;
+            tbt.insert(v);
+            break;
+         case 2:
+            cout<<"Display tree: \n ";
+            tbt.displayTree();
+            break;
+         case 99:
+            exit(1);
+         default:
+            cout<<"\nInvalid type! \n";
+      }
+   }
+   cout<<"\n";
+   return 0;
 }
