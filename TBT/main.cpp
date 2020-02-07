@@ -8,6 +8,7 @@ class N { //node declaration
    N *l, *r;
    bool leftTh, rightTh;
 };
+
 class ThreadedBinaryTree {
    private:
    N *root;
@@ -51,22 +52,22 @@ class ThreadedBinaryTree {
   
 
 
-	void displayTree() { //print the tree
-	   N *temp = root, *p;
-	   while(1) {
-	      p = temp;
-	      temp = temp->r;
-	      if (!p->rightTh) {
-	         while (!temp->leftTh) {
-	            temp = temp->l;
-	         }
-	      }
-	      if (temp == root)
-	         break;
-	      cout<<temp->k<<" ";
-	   }
-	   cout<<endl;
-	}
+void displayTree() { //print the tree
+   N *temp = root, *p;
+   for (;;) {
+      p = temp;
+      temp = temp->r;
+      if (!p->rightTh) {
+         while (!temp->leftTh) {
+            temp = temp->l;
+         }
+      }
+      if (temp == root)
+         break;
+      cout<<temp->k<<" ";
+   }
+   cout<<endl;
+}
 };
 int main() {
    ThreadedBinaryTree tbt;
