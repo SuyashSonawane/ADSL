@@ -129,16 +129,28 @@ int main()
 {
 	cout<<"AVL\n";
 	avl a;
-	a.insert();
-	a.insert();
-	a.insert();
-	a.insert();
-	a.insert();
-	a.insert();
-	cout<<endl;
-	a.print(a.root);
-	cout<<endl<<a.root->value<<endl;
+	int ui;
+	while(1)
+	{
+		cout<<"1.Insert\n2.Display\n99.Exit\n>>";
+		cin>>ui;
+		switch(ui)
+		{
+			case 1:
+			a.insert();
+			break;
 
+			case 2:
+			a.print(a.root);
+			break;
+
+			case 99:
+			return 0;
+
+			default:
+			cout<<"Enter valid option\n";
+		}
+	}
 
 }
 
