@@ -50,13 +50,15 @@ public:
 		cout << left << setw(nameWidth) << setfill(separator) << "Occurances\n";
 		for(int i=0;i<item_no+1;i++)
 		{
-			cout << left << setw(nameWidth) << setfill(separator) << i;
+			cout << left << setw(nameWidth) << setfill(separator) << i+1;
 			cout << left << setw(nameWidth) << setfill(separator) << arr[i].identifier;
 			cout << left << setw(nameWidth) << setfill(separator) << arr[i].datatype;
 			cout << left << setw(nameWidth) << setfill(separator) << arr[i].value;
 			for(int k=0;k<arr[i].occurance;k++)
 			{
-				cout << left << setw(2) << setfill(',') << arr[i].line_no[k];
+				cout << left << setw(3)<< arr[i].line_no[k];
+				if(i+1!=k)
+					cout<<",";
 			}
 			cout<<"\n";
 		}
